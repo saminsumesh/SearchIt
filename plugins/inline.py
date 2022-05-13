@@ -14,6 +14,7 @@ cache_time = 0 if AUTH_USERS or AUTH_CHANNEL else CACHE_TIME
 
 @Client.on_inline_query(filters.user(AUTH_USERS) if AUTH_USERS else None)
 async def answer(bot, query):
+    url_join = "zacbots"
     """Show search results for given inline query"""
 
     if AUTH_CHANNEL and not await is_subscribed(bot, query):
@@ -37,43 +38,62 @@ async def answer(bot, query):
     offset = int(query.offset or 0)
     reply_markup = get_reply_markup(bot.username, query=text)
     files, next_offset = await get_search_results(text, file_type=file_type, max_results=10, offset=offset)
-
-    for file in files:
+    search = inline.query
+    answer = []
+    if search == "":
         results.append(
-            InlineQueryResultCachedDocument(
-                title=file.file_name,
-                file_id=file.file_id,
-                caption=file.caption or "",
-                description=f'Size: {size_formatter(file.file_size)}\nType: {file.file_type}',
-                reply_markup=reply_markup
+            InlineQueryResultArticle(
+                title = "Search something..",
+                description = "You need to search a movie name in me to Get the movie file",
+                input_message_content = InputTextMessageContent(
+                    message_text = "Search Movies Here",
+                    parse_mode = "md"
+                    ),
+                    reply_markup = InlineKeyboardMarkup(
+                        [
+                            [
+                                InlineKeyboardButton("Join", url = f"https://t.me/{url_join}")
+                            ]
+                        ]
+                    )
+             )
+     )
+    elif search.startwith("!0"):
+        query = search.split(" ", 1)[-1]
+        if (query == "") or (query == " "):
+            for file in files:
+                results.append(
+                    InlineQueryResultCachedDocument(
+                        title = file.file_name,
+                        file_id = file.file_id,
+                        caption = file.caption or "",
+                        description = f"Size: {size_formatter(file.file_size)}\nType: {file.file_type}",
+                        reply_markup = reply_markup
+                        )
+                    )
+            if results:
+                switch_pm_text = f"{emoji.FILE_FOLDER} Results"
+                if text:
+                    switch_pm_text += f" for {text}"
+                
+                await query.answer(
+                    results = results,
+                    cache_time = cache_time,
+                    switch_pm_text = switch_pm_text,
+                    switch_pm_parameter = "start",
+                    next_offset = str(next_offset)
+                )
+            else:
+                
+                switch_pm_text = f"{emoji.CROSS_MARK} No Results"
+                if text:
+                    switch_pm_text += f' for "{text}"'
+                await query.answer(
+                    results = [],
+                    cache_time=cache_time,
+                    switch_pm_text = switch_pm_text,
+                    switch_pm_parameter = "Wow",
             )
-        )
-
-    if results:
-        switch_pm_text = f"{emoji.FILE_FOLDER} Results"
-        if text:
-            switch_pm_text += f" for {text}"
-
-        await query.answer(
-            results=results,
-            cache_time=cache_time,
-            switch_pm_text=switch_pm_text,
-            switch_pm_parameter="start",
-            next_offset=str(next_offset)
-        )
-    else:
-
-        switch_pm_text = f'{emoji.CROSS_MARK} No results'
-        if text:
-            switch_pm_text += f' for "{text}"'
-
-        await query.answer(
-            results=[],
-            cache_time=cache_time,
-            switch_pm_text=switch_pm_text,
-            switch_pm_parameter="okay",
-        )
-
 
 def get_reply_markup(username, query):
     url = 't.me/share/url?url=' + quote(SHARE_BUTTON_TEXT.format(username=username))
