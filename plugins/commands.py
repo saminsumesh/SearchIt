@@ -16,8 +16,8 @@ async def start(bot, message):
         buttons = [[
             InlineKeyboardButton("Request", switch_inline_query_current_chat="!")
         ],[
-            InlineKeyboardButton("Tamil", switch_inline_query_current_chat="!0 ")
-            InlineKeyboardButton("Malayalam", switch_inline_query_current_chat="!1 "),
+            InlineKeyboardButton("Tamil", switch_inline_query_current_chat="!0 "),
+            InlineKeyboardButton("Malayalam", switch_inline_query_current_chat="!1 ")
         ]]
         reply_markup = InlineKeyboardMarkup(buttons)
         await message.reply(START_MSG, reply_markup=reply_markup)
