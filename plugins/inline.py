@@ -3,7 +3,7 @@ from urllib.parse import quote
 
 from pyrogram import Client, emoji, filters
 from pyrogram.errors import UserNotParticipant
-from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
+from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, InlineQueryResultArticle
 
 from utils import get_search_results, InlineQueryResultCachedDocument
 from info import CACHE_TIME, SHARE_BUTTON_TEXT, AUTH_USERS, AUTH_CHANNEL
