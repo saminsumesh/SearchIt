@@ -40,7 +40,7 @@ async def answer(bot, query):
     files, next_offset = await get_search_results(text, file_type=file_type, max_results=10, offset=offset)
     search = query.query
     answer = []
-    if text == "":
+    if query == "":
         results.append(
             InlineQueryResultArticle(
                 title = "JOIN ✨",
@@ -59,7 +59,7 @@ async def answer(bot, query):
              )
      )
     elif text.startwith("!0"):
-        query = search.split(" ", 1)[-1]
+        query = query.split(" ", 1)[-1]
         if (query == "") or (query == " "):
             for file in files:
                 results.append(
