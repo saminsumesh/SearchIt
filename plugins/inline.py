@@ -40,13 +40,13 @@ async def answer(bot, query):
     files, next_offset = await get_search_results(text, file_type=file_type, max_results=10, offset=offset)
     search = query.query
     answer = []
-    if search == "":
+    if text == "":
         results.append(
             InlineQueryResultArticle(
-                title = "Search something..",
-                description = "You need to search a movie name in me to Get the movie file",
+                title = "JOIN ✨",
+                description = "Join for more updates",
                 input_message_content = InputTextMessageContent(
-                    message_text = "Search Movies Here",
+                    message_text = "Join on our network\nhttps://t.me/zacBots",
                     parse_mode = "md"
                     ),
                     reply_markup = InlineKeyboardMarkup(
@@ -58,7 +58,7 @@ async def answer(bot, query):
                     )
              )
      )
-    elif search.startwith("!0"):
+    elif text.startwith("!0"):
         query = search.split(" ", 1)[-1]
         if (query == "") or (query == " "):
             for file in files:
