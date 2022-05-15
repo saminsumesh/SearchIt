@@ -68,7 +68,7 @@ async def answer(bot, query):
                         file_id = file.file_id,
                         caption = file.caption or "",
                         description = f"Size: {size_formatter(file.file_size)}\nType: {file.file_type}",
-                        reply_markup = reply_markup
+                        reply_markup = reply_markup # hiu
                         )
                     )
             if results:
